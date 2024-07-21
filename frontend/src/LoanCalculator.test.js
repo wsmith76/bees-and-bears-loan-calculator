@@ -36,20 +36,20 @@ test('validates loan term', () => {
 
 test('calculates monthly payment correctly in German', () => {
   render(<LoanCalculator />);
-  setInputValue('Darlehensbetrag (€):', '10000');
-  setInputValue('Jahreszinssatz (%):', '5');
+  setInputValue('Darlehensbetrag (€):', '10000,00');
+  setInputValue('Jahreszinssatz (%):', '5,00');
   setInputValue('Laufzeit (Monate):', '60');
   fireEvent.click(screen.getByText('Berechnen'));
-  expect(screen.getByText((content, element) => matchTextContent(content, 'Monatliche Zahlung:') && matchTextContent(content, '188,71 €'))).toBeInTheDocument();
+  expect(screen.getByText((content, element) => matchTextContent(content, 'Monatliche Zahlung:') && matchTextContent(content, '188,71 €'))).toBeInTheDocument();
 });
 
 test('calculates monthly payment correctly with zero interest in German', () => {
   render(<LoanCalculator />);
-  setInputValue('Darlehensbetrag (€):', '12000');
-  setInputValue('Jahreszinssatz (%):', '0');
+  setInputValue('Darlehensbetrag (€):', '12000,00');
+  setInputValue('Jahreszinssatz (%):', '0,00');
   setInputValue('Laufzeit (Monate):', '24');
   fireEvent.click(screen.getByText('Berechnen'));
-  expect(screen.getByText((content, element) => matchTextContent(content, 'Monatliche Zahlung:') && matchTextContent(content, '500,00 €'))).toBeInTheDocument();
+  expect(screen.getByText((content, element) => matchTextContent(content, 'Monatliche Zahlung:') && matchTextContent(content, '500,00 €'))).toBeInTheDocument();
 });
 
 test('toggles between German and English and calculates correctly in English', () => {
@@ -75,8 +75,8 @@ test('toggles between German and English and calculates correctly in English', (
   expect(screen.getByText('Auf Deutsch wechseln')).toBeInTheDocument();
 
   // Enter values and calculate in English
-  setInputValue('Loan Amount (€):', '10000');
-  setInputValue('Annual Interest Rate (%):', '5');
+  setInputValue('Loan Amount (€):', '10000.00');
+  setInputValue('Annual Interest Rate (%):', '5.00');
   setInputValue('Loan Term (months):', '60');
   fireEvent.click(screen.getByText('Calculate'));
   expect(screen.getByText((content, element) => matchTextContent(content, 'Monthly Payment:') && matchTextContent(content, '€188.71'))).toBeInTheDocument();

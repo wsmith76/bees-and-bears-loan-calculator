@@ -31,12 +31,35 @@ const LoanCalculator = () => {
         setLanguage('de');
     }, []);
 
+    // Function to convert input based on language
+    const convertInput = (value) => {
+        if (language === 'de') {
+            return value.replace(',', '.');
+        }
+        return value;
+    };
+
+    // Function to handle input changes for amount and interest rate
+    const handleAmountChange = (e) => {
+        const value = e.target.value;
+        setAmount(value);
+    };
+
+    const handleInterestRateChange = (e) => {
+        const value = e.target.value;
+        setInterestRate(value);
+    };
+
     // Function to calculate monthly payment
     const calculatePayment = (e) => {
         e.preventDefault();
 
+        // Convert inputs based on language
+        const convertedAmount = convertInput(amount);
+        const convertedInterestRate = convertInput(interestRate);
+
         // Validate input values
-        const errors = validateInput(amount, interestRate, term);
+        const errors = validateInput(convertedAmount, convertedInterestRate, term);
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
             return;
@@ -45,8 +68,8 @@ const LoanCalculator = () => {
         setErrors({});
 
         // Calculate monthly payment
-        const principal = parseFloat(amount);
-        const interest = parseFloat(interestRate) / 100 / 12;
+        const principal = parseFloat(convertedAmount);
+        const interest = parseFloat(convertedInterestRate) / 100 / 12;
         const payments = parseFloat(term);
 
         let monthly;
@@ -112,9 +135,10 @@ const LoanCalculator = () => {
                     <label>
                         {labels[language].amount}
                         <input
-                            type="number"
+                            type="text"
                             value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
+                            onChange={handleAmountChange}
+                            placeholder={language === 'de' ? '1.000,00' : '1000.00'}
                             required
                         />
                     </label>
@@ -124,10 +148,10 @@ const LoanCalculator = () => {
                     <label>
                         {labels[language].interestRate}
                         <input
-                            type="number"
-                            step="0.01"
+                            type="text"
                             value={interestRate}
-                            onChange={(e) => setInterestRate(e.target.value)}
+                            onChange={handleInterestRateChange}
+                            placeholder={language === 'de' ? '5,00' : '5.00'}
                             required
                         />
                     </label>
